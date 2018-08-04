@@ -1,58 +1,72 @@
 #ifndef DECORATOR_H
 #define DECORATOR_H
 
+#include <iostream>
 #include <string>
 
-using std::string;
+namespace Decorator {
 
-// enhance/overwrite the way an object behaves at runtime
-class Pizza {
-public:
-  virtual float price() const = 0;
-  virtual string text() const = 0;
-  virtual ~Pizza() {}
-};
+  using std::string;
 
-// concrete components
-class NormalCrust : public Pizza {
-  float price() const override { return 3; }
-  string text() const override { return "pizza"; }
-};
+  // enhance/overwrite the way an object behaves at runtime
+  class Pizza {
+  public:
+    virtual float price() const = 0;
+    virtual string text() const = 0;
+    virtual ~Pizza() {}
+  };
 
-class ThinCrust : public Pizza {
-  float price() const override { return 2; }
-  std::string text() const override { return "thin crust pizza"; }
-};
+  // concrete components
+  class NormalCrust : public Pizza {
+    float price() const override { return 3; }
+    string text() const override { return "pizza"; }
+  };
 
-// decorator base
-class Decorator : public Pizza {
-  // gotta keep track of the decoratee
-  // could be an ownership as well. it is like a linked list
-  Pizza *component_;
-protected:
-  Pizza& getComponent() const {
-    return *component_;
-  }
+  class ThinCrust : public Pizza {
+    float price() const override { return 2; }
+    std::string text() const override { return "thin crust pizza"; }
+  };
 
-public:
-  Decorator(Pizza *p) : component_{p} {}
-  ~Decorator() { delete component_; }
-};
+  // decorator base
+  class Decorator : public Pizza {
+    // gotta keep track of the decoratee
+    // could be an ownership as well. it is like a linked list
+    Pizza *component_;
+  protected:
+    Pizza& getComponent() const {
+      return *component_;
+    }
 
-class Topping : public Decorator {
-  string name_;
-  float price_;
+  public:
+    Decorator(Pizza *p) : component_{p} {}
+    ~Decorator() { delete component_; }
+  };
 
-public:
-  Topping(string name, float price, Pizza *p)
-    : Decorator{p}, name_{name}, price_{price} {}
+  class Topping : public Decorator {
+    string name_;
+    float price_;
 
-  float price() const override {
-    return getComponent().price() + price_;
-  }
+  public:
+    Topping(string name, float price, Pizza *p)
+      : Decorator{p}, name_{name}, price_{price} {}
 
-  std::string text() const override {
-    return getComponent().text() + " with " + name_;
+    float price() const override {
+      return getComponent().price() + price_;
+    }
+
+    std::string text() const override {
+      return getComponent().text() + " with " + name_;
+    }
+  };
+
+  void test() {
+    Pizza *p = new NormalCrust;
+    std::cout << p->text() << std::endl;
+    std::cout << p->price() << std::endl;
+
+    p = new Topping("mushroom", 1, p);
+    std::cout << p->text() << std::endl;
+    std::cout << p->price() << std::endl;
   }
 };
 
