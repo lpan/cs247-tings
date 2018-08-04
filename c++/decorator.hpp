@@ -45,7 +45,7 @@ class Topping : public Decorator {
 
 public:
   Topping(string name, float price, Pizza *p)
-    : name_{name}, price_{price}, Decorator{p} {}
+    : Decorator{p}, name_{name}, price_{price} {}
 
   float price() const override {
     return getComponent().price() + price_;
