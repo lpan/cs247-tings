@@ -1,10 +1,12 @@
 #include "./decorator.hpp"
 #include "./iterator.hpp"
 #include "./template.hpp"
+#include "./visitor.hpp"
 
 int main() {
   // Decorator::test();
   // Iterator::test();
-  Template::test();
+  // Template::test();
+  Visitor::test();
   return 0;
 }
