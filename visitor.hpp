@@ -13,6 +13,10 @@ namespace Visitor {
    * - visitee being dispatched first
    * - visitor is capable of visiting all visitees (overloading)
    * - then visitor being dispatched
+   *
+   * Also, it is easy to add functionality to a class by
+   * 1. make the class "visitable"
+   * 2. write visitors that visit them
    */
 
   namespace Example1 {
