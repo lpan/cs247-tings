@@ -5,7 +5,6 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <stack>
 
 namespace Composite {
 
@@ -152,9 +151,6 @@ namespace Composite {
         if (cursor_ == -1) {
           return true;
         }
-
-        Container* ct = dynamic_cast<Container*>(component_);
-        assert(ct != nullptr);
 
         for (unsigned int i = cursor_; i < iters_.size(); ++i) {
           if (iters_.at(i)->hasNext()) {
