@@ -125,11 +125,11 @@ namespace Composite {
     }
 
     class ContainerIter : public Iter {
-      unsigned int cursor_;
+      int cursor_;
       std::vector<Iter*> iters_;
 
     public:
-      ContainerIter(Container* ct) : Iter{ct}, cursor_{0} {
+      ContainerIter(Container* ct) : Iter{ct}, cursor_{-1} {
         for (unsigned int i = 0; i < ct->size(); ++i) {
           iters_.emplace_back(ct->get(i)->createIterator());
         }
@@ -142,13 +142,17 @@ namespace Composite {
       }
 
       void first() override {
-        cursor_ = 0;
+        cursor_ = -1;
         for (auto& it : iters_) {
           it->first();
         }
       }
 
       bool hasNext() const override {
+        if (cursor_ == -1) {
+          return true;
+        }
+
         Container* ct = dynamic_cast<Container*>(component_);
         assert(ct != nullptr);
 
@@ -162,11 +166,16 @@ namespace Composite {
       }
 
       Component* next() override {
-        while (!iters_.at(cursor_)->hasNext() && cursor_ < iters_.size()) {
+        if (cursor_ == -1) {
+          cursor_ ++;
+          return component_;
+        }
+
+        while (!iters_.at(cursor_)->hasNext() && (unsigned int) cursor_ < iters_.size()) {
           cursor_++;
         }
 
-        if (cursor_ == iters_.size()) {
+        if ((unsigned int) cursor_ == iters_.size()) {
           return nullptr;
         }
 
@@ -203,21 +212,6 @@ namespace Composite {
     myHeroes.add(new Leaf("Squirrel Girl", 50));
 
     auto yeet = myHeroes.createIterator();
-    while (yeet->hasNext()) {
-      Component* c = yeet->next();
-      std::cout << c->name() << " : " << c->salary() << std::endl;
-    }
-
-    // should print nothing
-    std::cout << "watttt" << std::endl;
-    while (yeet->hasNext()) {
-      Component* c = yeet->next();
-      std::cout << c->name() << " : " << c->salary() << std::endl;
-    }
-
-    // reset
-    std::cout << "resetting" << std::endl;
-    yeet->first();
     while (yeet->hasNext()) {
       Component* c = yeet->next();
       std::cout << c->name() << " : " << c->salary() << std::endl;
