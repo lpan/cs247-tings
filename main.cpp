@@ -1,3 +1,4 @@
+#include "./composite.hpp"
 #include "./decorator.hpp"
 #include "./iterator.hpp"
 #include "./template.hpp"
@@ -7,6 +8,7 @@ int main() {
   // Decorator::test();
   // Iterator::test();
   // Template::test();
-  Visitor::test();
+  // Visitor::test();
+  Composite::test();
   return 0;
 }
