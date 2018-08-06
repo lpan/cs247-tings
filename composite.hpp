@@ -167,11 +167,11 @@ namespace Composite {
           return component_;
         }
 
-        while (!iters_.at(cursor_)->hasNext() && (unsigned int) cursor_ < iters_.size()) {
+        while (static_cast<unsigned int>(cursor_) < iters_.size() && !iters_.at(cursor_)->hasNext()) {
           cursor_++;
         }
 
-        if ((unsigned int) cursor_ == iters_.size()) {
+        if (static_cast<unsigned int>(cursor_) == iters_.size()) {
           return nullptr;
         }
 
